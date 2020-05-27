@@ -10,6 +10,8 @@ class ADM_AbandonedCart_Model_Observer
         if(!Mage::helper('adm_abandonedcart')->isEnabled()) {
             return false;
         }
+        
+        $this->deleteInvalidFollowups();
 
         $affectedRows = Mage::getModel('adm_abandonedcart/followup')->registerAbandonedCart();
 
@@ -28,5 +30,24 @@ class ADM_AbandonedCart_Model_Observer
         }
 
         return $this;
+    }
+    
+    private function deleteInvalidFollowups()
+    {
+        //Delete all followups where the quote is no longer abandoned. Thit is those cases where the quote was updated
+        //after the date when it was marked as abandoned or when it was converted into an order
+        $followupsToDelete = Mage::getModel('adm_abandonedcart/followup')->getCollection();
+        $select = $followupsToDelete->getSelect();
+        $select->join(
+            array('quote'=>$followupsToDelete->getTable('sales/quote')),
+            'main_table.quote_id=quote.entity_id',
+            array()
+        );
+        $select->where('quote.updated_at > main_table.abandoned_at OR quote.is_active = 0');
+
+        /** @var ADM_AbandonedCart_Model_Followup $followupToDelete */
+        foreach ($followupsToDelete as $followupToDelete) {
+            $followupToDelete->delete();
+        }
     }
 }
