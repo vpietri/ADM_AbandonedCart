@@ -57,6 +57,7 @@ class ADM_AbandonedCart_Model_Resource_Followup extends Mage_Core_Model_Resource
     protected function _getDateSubTime($nbr, $type = Zend_Date::HOUR)
     {
         $date  = Mage::app()->getLocale()->date()
+        ->setTimezone(Mage_Core_Model_Locale::DEFAULT_TIMEZONE)
         ->sub($nbr, $type)
         ->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
 
@@ -66,6 +67,7 @@ class ADM_AbandonedCart_Model_Resource_Followup extends Mage_Core_Model_Resource
     protected function _getDateAddTime($nbr, $type = Zend_Date::HOUR)
     {
         $date  = Mage::app()->getLocale()->date()
+        ->setTimezone(Mage_Core_Model_Locale::DEFAULT_TIMEZONE)
         ->add($nbr, $type)
         ->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
 
