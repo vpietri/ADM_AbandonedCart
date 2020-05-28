@@ -41,7 +41,7 @@ class ADM_AbandonedCart_Model_Resource_Followup extends Mage_Core_Model_Resource
                         'currency' => $quote->getQuoteCurrencyCode(),
                         'base_grand_total'=>$quote->getBaseGrandTotal(),
                         'coupon_code'=>$quote->getCouponCode(),
-                        'mail_scheduled_at'=>Varien_Date::now()
+                        'mail_scheduled_at'=>Mage::getModel('core/date')->gmtDate()
                         );
             }
 
