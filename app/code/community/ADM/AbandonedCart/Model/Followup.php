@@ -305,7 +305,7 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
     protected function _beforeSave()
     {
         if($this->getMailSent()) {
-            if ($this->getOffset() < 2) {
+            if ($this->getOffset() < Mage::helper('adm_abandonedcart')->getMaxOffset()-1) {
                 $this->setMailScheduledAt($this->_getNextDate());
             }
             $this->setOffset($this->getOffset()+1);
