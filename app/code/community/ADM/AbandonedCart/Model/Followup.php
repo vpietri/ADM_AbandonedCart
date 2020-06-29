@@ -334,12 +334,9 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
 
         $delayReal = $delayNext-$delayCurrent;
 
-        $date = new Zend_Date($this->getMailScheduledAt());
-        if($delayReal>0) {
-            $date->add($delayReal, Zend_Date::HOUR);
-        }
-
-        return $date;
+        return Mage::app()->getLocale()->date($this->getMailScheduledAt(), null, null, false)   //Do not mess with the timezone
+            ->add(max($delayReal, 0), Zend_Date::HOUR)  //Make sure not to add negative delays
+            ->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
     }
 
 }
