@@ -130,11 +130,16 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
     protected function _getCurrentQuoteId()
     {
         $checkoutSession = Mage::getSingleton('checkout/session');
-        if($checkoutSession->hasQuote()) {
-            return $checkoutSession->getQuoteId();
-        } else {
-            return false;
+        $quoteId = $checkoutSession->getQuoteId();
+        if ($quoteId) {
+            return $quoteId;
         }
+        
+        if ($checkoutSession->hasQuote()) {
+            return $checkoutSession->getQuote()->getId();
+        }
+
+        return false;
     }
 
 
