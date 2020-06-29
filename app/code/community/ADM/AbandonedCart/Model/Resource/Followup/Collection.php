@@ -15,7 +15,7 @@ class ADM_AbandonedCart_Model_Resource_Followup_Collection extends Mage_Core_Mod
 
         $this->addFieldToFilter('status', array('lteq'=>0))
             ->addFieldToFilter('offset', array('lt'=>Mage::helper('adm_abandonedcart')->getMaxOffset()))
-            ->addFieldToFilter('mail_scheduled_at', array('lteq'=>Mage::app()->getLocale()->date()->toString(Varien_Date::DATETIME_INTERNAL_FORMAT)));
+            ->addFieldToFilter('mail_scheduled_at', array('lteq' => Mage::getModel('core/date')->gmtDate()));
 
         $this->getSelect()->join(array('quote'=>$this->getTable('sales/quote')), 'main_table.quote_id=quote.entity_id', array('quote_still_active'=>'is_active'));
 
