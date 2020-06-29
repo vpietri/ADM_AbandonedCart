@@ -310,7 +310,9 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
     protected function _beforeSave()
     {
         if($this->getMailSent()) {
-            $this->setMailScheduledAt($this->_getNextDate());
+            if ($this->getOffset() < Mage::helper('adm_abandonedcart')->getMaxOffset()-1) {
+                $this->setMailScheduledAt($this->_getNextDate());
+            }
             $this->setOffset($this->getOffset()+1);
         }
 
@@ -327,8 +329,8 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
 
     protected function _getNextDate()
     {
-        $delayCurrent = Mage::helper('adm_abandonedcart')->getConfigByOffset('delay', $this->getOrigData('offset'), $this->getStoreId());
-        $delayNext    = Mage::helper('adm_abandonedcart')->getConfigByOffset('delay', $this->getOrigData('offset')+1, $this->getStoreId());
+        $delayCurrent = Mage::helper('adm_abandonedcart')->getConfigByOffset('delay', $this->getOrigData('offset')+1, $this->getStoreId());
+        $delayNext    = Mage::helper('adm_abandonedcart')->getConfigByOffset('delay', $this->getOrigData('offset')+2, $this->getStoreId());
 
         $delayReal = $delayNext-$delayCurrent;
 
